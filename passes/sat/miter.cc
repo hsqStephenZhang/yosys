@@ -159,11 +159,19 @@ void create_miter_equiv(struct Pass *that, std::vector<std::string> args, RTLIL:
 
 		if (gold_wire->port_input)
 		{
-			RTLIL::Wire *w = miter_module->addWire("\\in_" + RTLIL::unescape_id(gold_wire->name), gold_wire->width);
-			w->port_input = true;
+			RTLIL::Wire *w_gold = miter_module->addWire("\\gold." + RTLIL::unescape_id(gold_wire->name), gold_wire->width);
+			w_gold->port_input = true;
+			gold_cell->setPort(gold_wire->name, w_gold);
 
-			gold_cell->setPort(gold_wire->name, w);
-			gate_cell->setPort(gold_wire->name, w);
+			RTLIL::Wire *w_gate = miter_module->addWire("\\gate." + RTLIL::unescape_id(gold_wire->name), gold_wire->width);
+			w_gate->port_input = true;
+			gate_cell->setPort(gold_wire->name, w_gate);
+
+			// RTLIL::Wire *w = miter_module->addWire("\\in_" + RTLIL::unescape_id(gold_wire->name), gold_wire->width);
+			// w->port_input = true;
+
+			// gold_cell->setPort(gold_wire->name, w);
+			// gate_cell->setPort(gold_wire->name, w);
 		}
 
 		if (gold_wire->port_output)
